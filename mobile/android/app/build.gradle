@@ -77,7 +77,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "am.sure.mobile"
+        applicationId "am.sure.mobile.jd"
         minSdkVersion 24
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

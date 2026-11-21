@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/privacy_provider.dart';
 import '../widgets/sure_logo.dart';
+import '../extras/transactions_screen.dart';
 import 'chat_list_screen.dart';
 import 'dashboard_screen.dart';
 import 'intro_screen.dart';
@@ -27,6 +28,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
     if (!introLayout) {
       screens.add(DashboardScreen(key: _dashboardKey));
+      screens.add(const TransactionsScreen(embedded: true));
     }
 
     if (introLayout) {
@@ -49,7 +51,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     AuthProvider authProvider,
     bool introLayout,
   ) async {
-    const chatIndex = 1;
+    final chatIndex = introLayout ? 1 : 2;
 
     if (index == chatIndex && !authProvider.aiEnabled) {
       final enabled = await _showEnableAiPrompt();
@@ -70,7 +72,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   }
 
   Future<void> _handleSelectSettings(AuthProvider authProvider, bool introLayout) async {
-    final settingsIndex = introLayout ? 2 : 3;
+    final settingsIndex = introLayout ? 2 : 4;
     await _handleDestinationSelected(settingsIndex, authProvider, introLayout);
   }
 
@@ -83,6 +85,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           icon: const Icon(Icons.home_outlined),
           selectedIcon: const Icon(Icons.home),
           label: l.navHome,
+        ),
+      );
+      destinations.add(
+        const NavigationDestination(
+          icon: Icon(Icons.receipt_long_outlined),
+          selectedIcon: Icon(Icons.receipt_long),
+          label: 'Transactions',
         ),
       );
     }
@@ -241,7 +250,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Consumer<AuthProvider>(
       builder: (context, authProvider, _) {
         final introLayout = authProvider.isIntroLayout;
-        const chatIndex = 1;
+        final chatIndex = introLayout ? 1 : 2;
         final screens = _buildScreens(
           introLayout,
           () => _handleDestinationSelected(chatIndex, authProvider, introLayout),

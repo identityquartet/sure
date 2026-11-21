@@ -19,6 +19,7 @@ import '../theme/sure_tokens.dart';
 import '../theme/sure_typography.dart';
 import 'transaction_form_screen.dart';
 import 'transactions_list_screen.dart';
+import '../extras/accounts_screen.dart';
 import '../l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -360,6 +361,30 @@ class DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  Future<void> _openAccountDetail(Account account) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AccountDetailScreen(account: {
+          'id': account.id,
+          'name': account.name,
+          'balance': account.balance,
+          'cash_balance': account.cashBalance,
+          'currency': account.currency,
+          'classification': account.classification,
+          'account_type': account.accountType,
+          'subtype': account.subtype,
+          'status': account.status,
+          'institution_name': account.institutionName,
+        }),
+      ),
+    );
+    if (mounted) {
+      await _loadAccounts();
+    }
+  }
+
+  // ignore: unused_element
   Future<void> _handleAccountSwipe(Account account) async {
     await Navigator.push(
       context,
@@ -612,8 +637,8 @@ class DashboardScreenState extends State<DashboardScreen> {
               final account = accounts[index];
               return AccountCard(
                 account: account,
-                onTap: () => _handleAccountTap(account),
-                onSwipe: () => _handleAccountSwipe(account),
+                onTap: () => _openAccountDetail(account),
+                onSwipe: () => _handleAccountTap(account),
               );
             },
             childCount: accounts.length,
@@ -669,8 +694,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                   final account = groupAccounts[index];
                   return AccountCard(
                     account: account,
-                    onTap: () => _handleAccountTap(account),
-                    onSwipe: () => _handleAccountSwipe(account),
+                    onTap: () => _openAccountDetail(account),
+                    onSwipe: () => _handleAccountTap(account),
                   );
                 },
                 childCount: groupAccounts.length,
